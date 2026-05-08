@@ -147,6 +147,9 @@ input[type="number"] {
 .third-tab {
   display: inline-block;
   cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 4px 2px;
   font-size: 1.1em;
   color: #1a0034;
   font-family: "Gilroy Bold";
@@ -172,6 +175,15 @@ input[type="number"] {
   -moz-user-select: auto;
   -ms-user-select: auto;
   user-select: auto;
+}
+
+.toggle button:focus-visible,
+.add-expense:focus-visible,
+.add-income:focus-visible,
+ul.list button:focus-visible {
+  outline: 3px solid #f0624d;
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 /* ////////// ALL ///////////// */
@@ -219,7 +231,10 @@ input[type="number"] {
   width: 20px;
   height: 20px;
   right: 20px;
+  padding: 0;
+  border: 0;
   cursor: pointer;
+  background-color: transparent;
   background-image: url("icon/trash.png");
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -275,10 +290,19 @@ input[type="number"] {
   border: none;
 }
 
+.budget-dashboard #expense .input .add-expense,
+.budget-dashboard #income .input .add-income {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
 .budget-dashboard #expense .input .add-expense img {
   width: 40px;
   height: 40px;
-  cursor: pointer;
 }
 
 .budget-dashboard #expense ul {
@@ -317,7 +341,10 @@ input[type="number"] {
   width: 20px;
   height: 20px;
   right: 50px;
+  padding: 0;
+  border: 0;
   cursor: pointer;
+  background-color: transparent;
   background-image: url("icon/edit.png");
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -328,7 +355,10 @@ input[type="number"] {
   width: 20px;
   height: 20px;
   right: 20px;
+  padding: 0;
+  border: 0;
   cursor: pointer;
+  background-color: transparent;
   background-image: url("icon/trash.png");
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -381,7 +411,6 @@ input[type="number"] {
 .budget-dashboard #income .input .add-income img {
   width: 40px;
   height: 40px;
-  cursor: pointer;
 }
 
 .budget-dashboard #income ul {
@@ -419,7 +448,10 @@ input[type="number"] {
   width: 20px;
   height: 20px;
   right: 50px;
+  padding: 0;
+  border: 0;
   cursor: pointer;
+  background-color: transparent;
   background-image: url("icon/edit.png");
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -430,7 +462,10 @@ input[type="number"] {
   width: 20px;
   height: 20px;
   right: 20px;
+  padding: 0;
+  border: 0;
   cursor: pointer;
+  background-color: transparent;
   background-image: url("icon/trash.png");
   background-size: 20px 20px;
   background-repeat: no-repeat;

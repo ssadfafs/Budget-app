@@ -31,12 +31,36 @@
       </div>
       <div class="budget-dashboard">
         <div class="dash-title">Dashboard</div>
-        <div class="toggle">
-          <div class="first-tab">Expenses</div>
-          <div class="second-tab">Income</div>
-          <div class="third-tab focus">All</div>
+        <div class="toggle" role="tablist" aria-label="Budget entry views">
+          <button
+            class="first-tab"
+            type="button"
+            role="tab"
+            aria-controls="expense"
+            aria-selected="false"
+          >
+            Expenses
+          </button>
+          <button
+            class="second-tab"
+            type="button"
+            role="tab"
+            aria-controls="income"
+            aria-selected="false"
+          >
+            Income
+          </button>
+          <button
+            class="third-tab focus"
+            type="button"
+            role="tab"
+            aria-controls="all"
+            aria-selected="true"
+          >
+            All
+          </button>
         </div>
-        <div class="hide" id="expense">
+        <div class="hide" id="expense" role="tabpanel">
           <ul class="list"></ul>
           <div class="input">
             <input
@@ -51,10 +75,12 @@
               name="amount"
               placeholder="$0"
             />
-            <div class="add-expense"><img src="icon/plus.png" alt="+" /></div>
+            <button class="add-expense" type="button" aria-label="Add expense">
+              <img src="icon/plus.png" alt="" />
+            </button>
           </div>
         </div>
-        <div class="hide" id="income">
+        <div class="hide" id="income" role="tabpanel">
           <ul class="list"></ul>
           <div class="input">
             <input
@@ -69,10 +95,12 @@
               name="amount"
               placeholder="$0"
             />
-            <div class="add-income"><img src="icon/plus.png" alt="+" /></div>
+            <button class="add-income" type="button" aria-label="Add income">
+              <img src="icon/plus.png" alt="" />
+            </button>
           </div>
         </div>
-        <div id="all">
+        <div id="all" role="tabpanel">
           <ul class="list"></ul>
         </div>
       </div>

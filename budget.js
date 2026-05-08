@@ -145,7 +145,9 @@ allList.addEventListener("click", deleteOrEdit);
 
 // HELEPER FUNCS
 function deleteOrEdit(event) {
-  const targetBtn = event.target;
+  const targetBtn = event.target.closest("button");
+  if (!targetBtn) return;
+
   const entry = targetBtn.parentNode;
 
   if (targetBtn.id == EDIT) {
@@ -207,13 +209,17 @@ function showEntry(list, type, title, amount, id) {
 
   const entryDiv = document.createElement("div");
   entryDiv.className = "entry";
-  entryDiv.textContent = `${title} : $${amount}`;  // textContent 不解析HTML
+  entryDiv.textContent = `${title} : $${amount}`;
 
-  const editDiv = document.createElement("div");
+  const editDiv = document.createElement("button");
   editDiv.id = "edit";
+  editDiv.type = "button";
+  editDiv.setAttribute("aria-label", `Edit ${title}`);
 
-  const deleteDiv = document.createElement("div");
+  const deleteDiv = document.createElement("button");
   deleteDiv.id = "delete";
+  deleteDiv.type = "button";
+  deleteDiv.setAttribute("aria-label", `Delete ${title}`);
 
   li.appendChild(entryDiv);
   li.appendChild(editDiv);
@@ -259,9 +265,11 @@ function hide(elements) {
 
 function active(element) {
   element.classList.add("focus");
+  element.setAttribute("aria-selected", "true");
 }
 function inactive(elements) {
   elements.forEach((element) => {
     element.classList.remove("focus");
+    element.setAttribute("aria-selected", "false");
   });
 }
