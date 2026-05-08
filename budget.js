@@ -56,33 +56,85 @@ allBtn.addEventListener("click", function () {
 });
 
 addExpense.addEventListener("click", function () {
-  // CHECK IF ONE OF THE INPUT IS EMPTY => EXIT
-  if (!expenseTitle.value || !expenseAmount.value) return;
+  const title = expenseTitle.value.trim();
+  const amount = +expenseAmount.value;
 
-  // ADD INPUTs TO ENTRY_LIST
+  // Title validation
+  if (!title) {
+    alert("Please enter a title.");
+    return;
+  }
+  if (title.length > 30) {
+    alert("Title must be 30 characters or less.");
+    return;
+  }
+
+  // Amount validation
+  if (!expenseAmount.value) {
+    alert("Please enter an amount.");
+    return;
+  }
+  if (amount <= 0) {
+    alert("Amount must be greater than 0.");
+    return;
+  }
+  if (amount > 1000000) {
+    alert("Amount must not exceed 1,000,000.");
+    return;
+  }
+  if (Math.round(amount * 100) !== amount * 100) {
+    alert("Amount must have at most 2 decimal places.");
+    return;
+  }
+
   let expense = {
     type: "expense",
-    title: expenseTitle.value,
-    amount: +expenseAmount.value,
+    title: title,
+    amount: amount,
   };
   ENTRY_LIST.push(expense);
-
   updateUI();
   clearInput([expenseTitle, expenseAmount]);
 });
 
 addIncome.addEventListener("click", function () {
-  // CHECK IF ONE OF THE INPUT IS EMPTY => EXIT
-  if (!incomeTitle.value || !incomeAmount.value) return;
+  const title = incomeTitle.value.trim();
+  const amount = +incomeAmount.value;
 
-  // ADD INPUTs TO ENTRY_LIST
+  // Title validation
+  if (!title) {
+    alert("Please enter a title.");
+    return;
+  }
+  if (title.length > 30) {
+    alert("Title must be 30 characters or less.");
+    return;
+  }
+
+  // Amount validation
+  if (!incomeAmount.value) {
+    alert("Please enter an amount.");
+    return;
+  }
+  if (amount <= 0) {
+    alert("Amount must be greater than 0.");
+    return;
+  }
+  if (amount > 1000000) {
+    alert("Amount must not exceed 1,000,000.");
+    return;
+  }
+  if (Math.round(amount * 100) !== amount * 100) {
+    alert("Amount must have at most 2 decimal places.");
+    return;
+  }
+
   let income = {
     type: "income",
-    title: incomeTitle.value,
-    amount: +incomeAmount.value,
+    title: title,
+    amount: amount,
   };
   ENTRY_LIST.push(income);
-
   updateUI();
   clearInput([incomeTitle, incomeAmount]);
 });
