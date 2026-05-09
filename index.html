@@ -1,114 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Budget Web App | javascript</title>
-    <link href="./style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <div class="budget-container">
-      <div class="app-title">
-        <a href="">Budget<b>App</b></a>
-      </div>
-      <div class="budget-header">
-        <div class="balance">
-          <div class="title">Balance</div>
-          <div class="value"><small>$</small>0</div>
-        </div>
-        <div class="account">
-          <div class="income">
-            <div class="title">Income</div>
-            <div class="income-total"><small>$</small>0</div>
-          </div>
-          <div class="chart"></div>
-          <div class="outcome">
-            <div class="title">Outcome</div>
-            <div class="outcome-total"><small>$</small>0</div>
-          </div>
-        </div>
-      </div>
-      <div class="budget-dashboard">
-        <div class="dash-title">Dashboard</div>
-        <div class="toggle" role="tablist" aria-label="Budget entry views">
-          <button
-            class="first-tab"
-            type="button"
-            role="tab"
-            aria-controls="expense"
-            aria-selected="false"
-          >
-            Expenses
-          </button>
-          <button
-            class="second-tab"
-            type="button"
-            role="tab"
-            aria-controls="income"
-            aria-selected="false"
-          >
-            Income
-          </button>
-          <button
-            class="third-tab focus"
-            type="button"
-            role="tab"
-            aria-controls="all"
-            aria-selected="true"
-          >
-            All
-          </button>
-        </div>
-        <div class="hide" id="expense" role="tabpanel">
-          <ul class="list"></ul>
-          <div class="input">
-            <input
-              type="text"
-              id="expense-title-input"
-              name="title"
-              placeholder="title"
-            />
-            <input
-              type="number"
-              id="expense-amount-input"
-              name="amount"
-              placeholder="$0"
-            />
-            <button class="add-expense" type="button" aria-label="Add expense">
-              <img src="icon/plus.png" alt="" />
-            </button>
-          </div>
-        </div>
-        <div class="hide" id="income" role="tabpanel">
-          <ul class="list"></ul>
-          <div class="input">
-            <input
-              type="text"
-              id="income-title-input"
-              name="title"
-              placeholder="title"
-            />
-            <input
-              type="number"
-              id="income-amount-input"
-              name="amount"
-              placeholder="$0"
-            />
-            <button class="add-income" type="button" aria-label="Add income">
-              <img src="icon/plus.png" alt="" />
-            </button>
-          </div>
-        </div>
-        <div id="all" role="tabpanel">
-  <ul class="list"></ul>
-  <div style="text-align: center; color: #999; padding: 30px 0; font-size: 16px;">
-    No transactions yet. Add your first income or expense to get started!
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Web App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="budget-container">
+  <div class="app-title"><a href="">Budget<b>App</b></a ></div>
+  <div class="budget-header">
+    <div class="balance"><div class="title">Balance</div><div class="value"><small>$</small>0</div></div>
+    <div class="account">
+      <div class="income"><div class="title">Income</div><div class="income-total"><small>$</small>0</div></div>
+      <div class="chart"></div>
+      <div class="outcome"><div class="title">Outcome</div><div class="outcome-total"><small>$</small>0</div></div>
+    </div>
   </div>
-</div>
+  <div class="budget-dashboard">
+    <div class="dash-title">Dashboard</div>
+    <div class="toggle" role="tablist">
+      <button class="first-tab" type="button" role="tab">Expenses</button>
+      <button class="second-tab" type="button" role="tab">Income</button>
+      <button class="third-tab focus" type="button" role="tab">All</button>
+    </div>
+    <div class="hide" id="expense" role="tabpanel">
+      <ul class="list"></ul>
+      <div class="input">
+        <input type="text" id="expense-title-input" placeholder="title">
+        <input type="number" id="expense-amount-input" placeholder="$0">
+        <button class="add-expense" type="button">< img src="icon/plus.png" alt=""></button>
       </div>
     </div>
-    <script src="./chart.js"></script>
-    <script src="./budget.js"></script>
-  </body>
+    <div class="hide" id="income" role="tabpanel">
+      <ul class="list"></ul>
+      <div class="input">
+        <input type="text" id="income-title-input" placeholder="title">
+        <input type="number" id="income-amount-input" placeholder="$0">
+        <button class="add-income" type="button">< img src="icon/plus.png" alt=""></button>
+      </div>
+    </div>
+    <div id="all" role="tabpanel">
+      <ul class="list"></ul>
+      <div class="placeholder-msg">No transactions yet. Add your first income or expense to get started!</div>
+    </div>
+  </div>
+</div>
+<script src="chart.js"></script>
+<script src="budget.js"></script>
+<div id="toast-message" class="toast-message"></div>
+</body>
 </html>

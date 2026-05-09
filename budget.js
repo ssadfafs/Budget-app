@@ -1,4 +1,13 @@
-//SELECT ELEMENTS
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast-message");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove("success", "error");
+  toast.classList.add(type);
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
 const balanceEl = document.querySelector(".balance .value");
 const incomeTotalEl = document.querySelector(".income-total");
 const outcomeTotalEl = document.querySelector(".outcome-total");
@@ -9,267 +18,133 @@ const incomeList = document.querySelector("#income .list");
 const expenseList = document.querySelector("#expense .list");
 const allList = document.querySelector("#all .list");
 
-//SELECT BUTTONS
 const expenseBtn = document.querySelector(".first-tab");
 const incomeBtn = document.querySelector(".second-tab");
 const allBtn = document.querySelector(".third-tab");
 
-//INPUT BTS
 const addExpense = document.querySelector(".add-expense");
 const expenseTitle = document.getElementById("expense-title-input");
 const expenseAmount = document.getElementById("expense-amount-input");
-
 const addIncome = document.querySelector(".add-income");
 const incomeTitle = document.getElementById("income-title-input");
 const incomeAmount = document.getElementById("income-amount-input");
 
-//VARIABLES
 let ENTRY_LIST;
-let balance = 0,
-  income = 0,
-  outcome = 0;
-const DELETE = "delete",
-  EDIT = "edit";
+let balance = 0, income = 0, outcome = 0;
+const DELETE = "delete", EDIT = "edit";
 
-// LOOK IF THERE IS DATA IN LOCAL STORAGE
 ENTRY_LIST = JSON.parse(localStorage.getItem("entry_list")) || [];
 updateUI();
 
-//EVENT LISTENERS
-expenseBtn.addEventListener("click", function () {
-  show(expenseEl);
-  hide([incomeEl, allEl]);
-  active(expenseBtn);
-  inactive([incomeBtn, allBtn]);
-});
-incomeBtn.addEventListener("click", function () {
-  show(incomeEl);
-  hide([expenseEl, allEl]);
-  active(incomeBtn);
-  inactive([expenseBtn, allBtn]);
-});
-allBtn.addEventListener("click", function () {
-  show(allEl);
-  hide([incomeEl, expenseEl]);
-  active(allBtn);
-  inactive([incomeBtn, expenseBtn]);
-});
+expenseBtn.addEventListener("click", () => { show(expenseEl); hide([incomeEl, allEl]); active(expenseBtn); inactive([incomeBtn, allBtn]); });
+incomeBtn.addEventListener("click", () => { show(incomeEl); hide([expenseEl, allEl]); active(incomeBtn); inactive([expenseBtn, allBtn]); });
+allBtn.addEventListener("click", () => { show(allEl); hide([incomeEl, expenseEl]); active(allBtn); inactive([incomeBtn, expenseBtn]); });
 
-addExpense.addEventListener("click", function () {
+addExpense.addEventListener("click", async function() {
   const title = expenseTitle.value.trim();
   const amount = +expenseAmount.value;
+  if (!title) { showToast("Please enter a title.", "error"); return; }
+  if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
+  if (!expenseAmount.value) { showToast("Please enter an amount.", "error"); return; }
+  if (amount <= 0) { showToast("Amount must be greater than 0.", "error"); return; }
+  if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
+  if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
-  // Title validation
-  if (!title) {
-    alert("Please enter a title.");
-    return;
+  const originalText = addExpense.innerHTML;
+  addExpense.classList.add("loading");
+  addExpense.innerHTML = '< img src="icon/plus.png" alt=""> Adding...';
+  try {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    ENTRY_LIST.push({ type: "expense", title, amount });
+    updateUI();
+    clearInput([expenseTitle, expenseAmount]);
+    showToast("Expense added successfully!", "success");
+  } catch(e) { showToast("Failed to add expense.", "error");
+  } finally {
+    addExpense.classList.remove("loading");
+    addExpense.innerHTML = originalText;
   }
-  if (title.length > 30) {
-    alert("Title must be 30 characters or less.");
-    return;
-  }
-
-  // Amount validation
-  if (!expenseAmount.value) {
-    alert("Please enter an amount.");
-    return;
-  }
-  if (amount <= 0) {
-    alert("Amount must be greater than 0.");
-    return;
-  }
-  if (amount > 1000000) {
-    alert("Amount must not exceed 1,000,000.");
-    return;
-  }
-  if (Math.round(amount * 100) !== amount * 100) {
-    alert("Amount must have at most 2 decimal places.");
-    return;
-  }
-
-  let expense = {
-    type: "expense",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(expense);
-  updateUI();
-  clearInput([expenseTitle, expenseAmount]);
 });
 
-addIncome.addEventListener("click", function () {
+addIncome.addEventListener("click", async function() {
   const title = incomeTitle.value.trim();
   const amount = +incomeAmount.value;
+  if (!title) { showToast("Please enter a title.", "error"); return; }
+  if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
+  if (!incomeAmount.value) { showToast("Please enter an amount.", "error"); return; }
+  if (amount <= 0) { showToast("Amount must be greater than 0.", "error"); return; }
+  if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
+  if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
-  // Title validation
-  if (!title) {
-    alert("Please enter a title.");
-    return;
+  const originalText = addIncome.innerHTML;
+  addIncome.classList.add("loading");
+  addIncome.innerHTML = '< img src="icon/plus.png" alt=""> Adding...';
+  try {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    ENTRY_LIST.push({ type: "income", title, amount });
+    updateUI();
+    clearInput([incomeTitle, incomeAmount]);
+    showToast("Income added successfully!", "success");
+  } catch(e) { showToast("Failed to add income.", "error");
+  } finally {
+    addIncome.classList.remove("loading");
+    addIncome.innerHTML = originalText;
   }
-  if (title.length > 30) {
-    alert("Title must be 30 characters or less.");
-    return;
-  }
-
-  // Amount validation
-  if (!incomeAmount.value) {
-    alert("Please enter an amount.");
-    return;
-  }
-  if (amount <= 0) {
-    alert("Amount must be greater than 0.");
-    return;
-  }
-  if (amount > 1000000) {
-    alert("Amount must not exceed 1,000,000.");
-    return;
-  }
-  if (Math.round(amount * 100) !== amount * 100) {
-    alert("Amount must have at most 2 decimal places.");
-    return;
-  }
-
-  let income = {
-    type: "income",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(income);
-  updateUI();
-  clearInput([incomeTitle, incomeAmount]);
 });
 
 incomeList.addEventListener("click", deleteOrEdit);
 expenseList.addEventListener("click", deleteOrEdit);
 allList.addEventListener("click", deleteOrEdit);
 
-// HELEPER FUNCS
-function deleteOrEdit(event) {
-  const targetBtn = event.target.closest("button");
-  if (!targetBtn) return;
-
-  const entry = targetBtn.parentNode;
-
-  if (targetBtn.id == EDIT) {
-    editEntry(entry);
-  } else if (targetBtn.id == DELETE) {
-    deleteEntry(entry);
-  }
+function deleteOrEdit(e) {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const entry = btn.parentNode;
+  if (btn.id === EDIT) editEntry(entry);
+  else if (btn.id === DELETE) deleteEntry(entry);
 }
-
-function deleteEntry(entry) {
-  ENTRY_LIST.splice(entry.id, 1);
-  updateUI();
-}
-
+function deleteEntry(entry) { ENTRY_LIST.splice(entry.id, 1); updateUI(); }
 function editEntry(entry) {
-  const ENTRY = ENTRY_LIST[entry.id];
-
-  if (ENTRY.type == "income") {
-    incomeTitle.value = ENTRY.title;
-    incomeAmount.value = ENTRY.amount;
-  } else if (ENTRY.type == "expense") {
-    expenseTitle.value = ENTRY.title;
-    expenseAmount.value = ENTRY.amount;
+  const e = ENTRY_LIST[entry.id];
+  if (e.type === "income") {
+    incomeTitle.value = e.title;
+    incomeAmount.value = e.amount;
+  } else {
+    expenseTitle.value = e.title;
+    expenseAmount.value = e.amount;
   }
   deleteEntry(entry);
 }
-
 function updateUI() {
   income = calculateTotal("income", ENTRY_LIST);
   outcome = calculateTotal("expense", ENTRY_LIST);
-  balance = Math.abs(calculateBalance(income, outcome));
-
-  let sign = income >= outcome ? "$" : "-$";
-
-  //UPDATE UI
+  balance = Math.abs(income - outcome);
+  const sign = income >= outcome ? "$" : "-$";
   balanceEl.innerHTML = `<small>${sign}</small>${balance}`;
   outcomeTotalEl.innerHTML = `<small>$</small>${outcome}`;
   incomeTotalEl.innerHTML = `<small>$</small>${income}`;
-
   clearElement([expenseList, incomeList, allList]);
-
-  ENTRY_LIST.forEach((entry, index) => {
-    if (entry.type == "expense") {
-      showEntry(expenseList, entry.type, entry.title, entry.amount, index);
-    } else if (entry.type == "income") {
-      showEntry(incomeList, entry.type, entry.title, entry.amount, index);
-    }
-    showEntry(allList, entry.type, entry.title, entry.amount, index);
+  ENTRY_LIST.forEach((entry, idx) => {
+    if (entry.type === "expense") showEntry(expenseList, entry.type, entry.title, entry.amount, idx);
+    else showEntry(incomeList, entry.type, entry.title, entry.amount, idx);
+    showEntry(allList, entry.type, entry.title, entry.amount, idx);
   });
   updateChart(income, outcome);
   localStorage.setItem("entry_list", JSON.stringify(ENTRY_LIST));
 }
-
-// fix — avoid XSS
 function showEntry(list, type, title, amount, id) {
   const li = document.createElement("li");
-  li.id = id;
-  li.className = type;
-
-  const entryDiv = document.createElement("div");
-  entryDiv.className = "entry";
-  entryDiv.textContent = `${title} : $${amount}`;
-
-  const editDiv = document.createElement("button");
-  editDiv.id = "edit";
-  editDiv.type = "button";
-  editDiv.setAttribute("aria-label", `Edit ${title}`);
-
-  const deleteDiv = document.createElement("button");
-  deleteDiv.id = "delete";
-  deleteDiv.type = "button";
-  deleteDiv.setAttribute("aria-label", `Delete ${title}`);
-
-  li.appendChild(entryDiv);
-  li.appendChild(editDiv);
-  li.appendChild(deleteDiv);
-
-  list.insertBefore(li, list.firstChild);
+  li.id = id; li.className = type;
+  const div = document.createElement("div"); div.className = "entry"; div.textContent = `${title} : $${amount}`;
+  const editBtn = document.createElement("button"); editBtn.id = EDIT; editBtn.type = "button"; editBtn.setAttribute("aria-label", `Edit ${title}`);
+  const delBtn = document.createElement("button"); delBtn.id = DELETE; delBtn.type = "button"; delBtn.setAttribute("aria-label", `Delete ${title}`);
+  li.append(div, editBtn, delBtn);
+  list.prepend(li);
 }
-
-function clearElement(elements) {
-  elements.forEach((element) => {
-    element.innerHTML = "";
-  });
-}
-
-function calculateTotal(type, list) {
-  let sum = 0;
-  list.forEach((entry) => {
-    if (entry.type == type) {
-      sum += entry.amount;
-    }
-  });
-  return sum;
-}
-
-function calculateBalance(income, outcome) {
-  return income - outcome;
-}
-function clearInput(inputs) {
-  inputs.forEach((input) => {
-    input.value = "";
-  });
-}
-
-function show(element) {
-  element.classList.remove("hide");
-}
-
-function hide(elements) {
-  elements.forEach((element) => {
-    element.classList.add("hide");
-  });
-}
-
-function active(element) {
-  element.classList.add("focus");
-  element.setAttribute("aria-selected", "true");
-}
-function inactive(elements) {
-  elements.forEach((element) => {
-    element.classList.remove("focus");
-    element.setAttribute("aria-selected", "false");
-  });
-}
+function clearElement(arr) { arr.forEach(el => el.innerHTML = ""); }
+function calculateTotal(type, list) { return list.reduce((s, e) => e.type === type ? s + e.amount : s, 0); }
+function clearInput(arr) { arr.forEach(i => i.value = ""); }
+function show(el) { el.classList.remove("hide"); }
+function hide(arr) { arr.forEach(el => el.classList.add("hide")); }
+function active(el) { el.classList.add("focus"); el.setAttribute("aria-selected","true"); }
+function inactive(arr) { arr.forEach(el => { el.classList.remove("focus"); el.setAttribute("aria-selected","false"); }); }
