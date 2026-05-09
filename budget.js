@@ -69,7 +69,6 @@ addExpense.addEventListener("click", async function () {
   const title = expenseTitle.value.trim();
   const amount = +expenseAmount.value;
 
-  // 完整验证（保留原有逻辑，改用 toast）
   if (!title) { showToast("Please enter a title.", "error"); return; }
   if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
   if (!expenseAmount.value) { showToast("Please enter an amount.", "error"); return; }
@@ -77,7 +76,6 @@ addExpense.addEventListener("click", async function () {
   if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
   if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
-  // Loading 反馈
   const originalText = addExpense.innerHTML;
   addExpense.classList.add("loading");
   addExpense.innerHTML = '< img src="icon/plus.png" alt="" /> Adding...';
@@ -131,9 +129,9 @@ allList.addEventListener("click", deleteOrEdit);
 
 // HELPER FUNCS
 function deleteOrEdit(event) {
-  const targetBtn = event.target;
+  const targetBtn = event.target.closest("button");
+  if (!targetBtn) return;
   const entry = targetBtn.parentNode;
-
   if (targetBtn.id == EDIT) {
     editEntry(entry);
   } else if (targetBtn.id == DELETE) {
@@ -148,7 +146,6 @@ function deleteEntry(entry) {
 
 function editEntry(entry) {
   const ENTRY = ENTRY_LIST[entry.id];
-
   if (ENTRY.type == "income") {
     incomeTitle.value = ENTRY.title;
     incomeAmount.value = ENTRY.amount;
@@ -163,15 +160,11 @@ function updateUI() {
   income = calculateTotal("income", ENTRY_LIST);
   outcome = calculateTotal("expense", ENTRY_LIST);
   balance = Math.abs(calculateBalance(income, outcome));
-
   let sign = income >= outcome ? "$" : "-$";
-
   balanceEl.innerHTML = `<small>${sign}</small>${balance}`;
   outcomeTotalEl.innerHTML = `<small>$</small>${outcome}`;
   incomeTotalEl.innerHTML = `<small>$</small>${income}`;
-
   clearElement([expenseList, incomeList, allList]);
-
   ENTRY_LIST.forEach((entry, index) => {
     if (entry.type == "expense") {
       showEntry(expenseList, entry.type, entry.title, entry.amount, index);
@@ -185,13 +178,24 @@ function updateUI() {
 }
 
 function showEntry(list, type, title, amount, id) {
-  const entry = `<li id="${id}" class="${type}">
-                    <div class="entry">${title} : $${amount}</div>
-                    <div id="edit"></div>
-                    <div id="delete"></div>
-                  </li>`;
-  const position = "afterbegin";
-  list.insertAdjacentHTML(position, entry);
+  const li = document.createElement("li");
+  li.id = id;
+  li.className = type;
+  const entryDiv = document.createElement("div");
+  entryDiv.className = "entry";
+  entryDiv.textContent = `${title} : $${amount}`;
+  const editDiv = document.createElement("button");
+  editDiv.id = "edit";
+  editDiv.type = "button";
+  editDiv.setAttribute("aria-label", `Edit ${title}`);
+  const deleteDiv = document.createElement("button");
+  deleteDiv.id = "delete";
+  deleteDiv.type = "button";
+  deleteDiv.setAttribute("aria-label", `Delete ${title}`);
+  li.appendChild(entryDiv);
+  li.appendChild(editDiv);
+  li.appendChild(deleteDiv);
+  list.insertBefore(li, list.firstChild);
 }
 
 function clearElement(elements) {
@@ -203,9 +207,7 @@ function clearElement(elements) {
 function calculateTotal(type, list) {
   let sum = 0;
   list.forEach((entry) => {
-    if (entry.type == type) {
-      sum += entry.amount;
-    }
+    if (entry.type == type) sum += entry.amount;
   });
   return sum;
 }
@@ -232,10 +234,12 @@ function hide(elements) {
 
 function active(element) {
   element.classList.add("focus");
+  element.setAttribute("aria-selected", "true");
 }
 
 function inactive(elements) {
   elements.forEach((element) => {
     element.classList.remove("focus");
+    element.setAttribute("aria-selected", "false");
   });
 }
