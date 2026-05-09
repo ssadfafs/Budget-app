@@ -238,7 +238,7 @@ function calculateTotal(type, list) {
   let sum = 0;
   list.forEach((entry) => {
     if (entry.type == type) {
-      sum += entry.amount;
+      sum = Math.round(sum * 100 + entry.amount * 100) / 100
     }
   });
   return sum;
