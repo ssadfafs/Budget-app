@@ -69,6 +69,7 @@ addExpense.addEventListener("click", async function () {
   const title = expenseTitle.value.trim();
   const amount = +expenseAmount.value;
 
+  // 完整验证（保留原有逻辑，改用 toast）
   if (!title) { showToast("Please enter a title.", "error"); return; }
   if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
   if (!expenseAmount.value) { showToast("Please enter an amount.", "error"); return; }
@@ -76,6 +77,7 @@ addExpense.addEventListener("click", async function () {
   if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
   if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
+  // Loading 反馈
   const originalText = addExpense.innerHTML;
   addExpense.classList.add("loading");
   addExpense.innerHTML = '< img src="icon/plus.png" alt="" /> Adding...';
@@ -129,9 +131,7 @@ allList.addEventListener("click", deleteOrEdit);
 
 // HELPER FUNCS
 function deleteOrEdit(event) {
-  const targetBtn = event.target.closest("button");
-  if (!targetBtn) return;
-
+  const targetBtn = event.target;
   const entry = targetBtn.parentNode;
 
   if (targetBtn.id == EDIT) {
@@ -185,29 +185,13 @@ function updateUI() {
 }
 
 function showEntry(list, type, title, amount, id) {
-  const li = document.createElement("li");
-  li.id = id;
-  li.className = type;
-
-  const entryDiv = document.createElement("div");
-  entryDiv.className = "entry";
-  entryDiv.textContent = `${title} : $${amount}`;
-
-  const editDiv = document.createElement("button");
-  editDiv.id = "edit";
-  editDiv.type = "button";
-  editDiv.setAttribute("aria-label", `Edit ${title}`);
-
-  const deleteDiv = document.createElement("button");
-  deleteDiv.id = "delete";
-  deleteDiv.type = "button";
-  deleteDiv.setAttribute("aria-label", `Delete ${title}`);
-
-  li.appendChild(entryDiv);
-  li.appendChild(editDiv);
-  li.appendChild(deleteDiv);
-
-  list.insertBefore(li, list.firstChild);
+  const entry = `<li id="${id}" class="${type}">
+                    <div class="entry">${title} : $${amount}</div>
+                    <div id="edit"></div>
+                    <div id="delete"></div>
+                  </li>`;
+  const position = "afterbegin";
+  list.insertAdjacentHTML(position, entry);
 }
 
 function clearElement(elements) {
@@ -248,12 +232,10 @@ function hide(elements) {
 
 function active(element) {
   element.classList.add("focus");
-  element.setAttribute("aria-selected", "true");
 }
 
 function inactive(elements) {
   elements.forEach((element) => {
     element.classList.remove("focus");
-    element.setAttribute("aria-selected", "false");
   });
 }
