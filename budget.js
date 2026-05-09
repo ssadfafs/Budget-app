@@ -31,8 +31,32 @@ let balance = 0,
 const DELETE = "delete",
   EDIT = "edit";
 
+// ── COOKIE BANNER ──────────────────────────────────────────
+const cookieBanner = document.getElementById("cookie-banner");
+const cookieAcceptBtn = document.getElementById("cookie-accept");
+const cookieDeclineBtn = document.getElementById("cookie-decline");
+
+if (localStorage.getItem("cookie_accepted") === "true") {
+  cookieBanner.style.display = "none";
+}
+
+cookieAcceptBtn.addEventListener("click", function () {
+  localStorage.setItem("cookie_accepted", "true");
+  cookieBanner.style.display = "none";
+});
+
+cookieDeclineBtn.addEventListener("click", function () {
+  localStorage.setItem("cookie_accepted", "false");
+  cookieBanner.style.display = "none";
+});
+// ───────────────────────────────────────────────────────────
+
 // LOOK IF THERE IS DATA IN LOCAL STORAGE
-ENTRY_LIST = JSON.parse(localStorage.getItem("entry_list")) || [];
+if (localStorage.getItem("cookie_accepted") === "true") {
+  ENTRY_LIST = JSON.parse(localStorage.getItem("entry_list")) || [];
+} else {
+  ENTRY_LIST = [];
+}
 updateUI();
 
 //EVENT LISTENERS
@@ -198,7 +222,9 @@ function updateUI() {
     showEntry(allList, entry.type, entry.title, entry.amount, index);
   });
   updateChart(income, outcome);
+  if (localStorage.getItem("cookie_accepted") === "true") {
   localStorage.setItem("entry_list", JSON.stringify(ENTRY_LIST));
+}
 }
 
 // fix — avoid XSS
@@ -238,7 +264,7 @@ function calculateTotal(type, list) {
   let sum = 0;
   list.forEach((entry) => {
     if (entry.type == type) {
-      sum += entry.amount;
+      sum = Math.round(sum * 100 + entry.amount * 100) / 100;
     }
   });
   return sum;
