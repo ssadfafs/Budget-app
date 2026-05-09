@@ -1,3 +1,13 @@
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast-message");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove("success", "error");
+  toast.classList.add(type);
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
 //SELECT ELEMENTS
 const balanceEl = document.querySelector(".balance .value");
 const incomeTotalEl = document.querySelector(".income-total");
@@ -55,95 +65,69 @@ allBtn.addEventListener("click", function () {
   inactive([incomeBtn, expenseBtn]);
 });
 
-addExpense.addEventListener("click", function () {
+addExpense.addEventListener("click", async function () {
   const title = expenseTitle.value.trim();
   const amount = +expenseAmount.value;
 
-  // Title validation
-  if (!title) {
-    alert("Please enter a title.");
-    return;
-  }
-  if (title.length > 30) {
-    alert("Title must be 30 characters or less.");
-    return;
-  }
+  if (!title) { showToast("Please enter a title.", "error"); return; }
+  if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
+  if (!expenseAmount.value) { showToast("Please enter an amount.", "error"); return; }
+  if (amount <= 0) { showToast("Amount must be greater than 0.", "error"); return; }
+  if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
+  if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
-  // Amount validation
-  if (!expenseAmount.value) {
-    alert("Please enter an amount.");
-    return;
+  const originalText = addExpense.innerHTML;
+  addExpense.classList.add("loading");
+  addExpense.innerHTML = '< img src="icon/plus.png" alt="" /> Adding...';
+  try {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    let expense = { type: "expense", title, amount };
+    ENTRY_LIST.push(expense);
+    updateUI();
+    clearInput([expenseTitle, expenseAmount]);
+    showToast("Expense added successfully!", "success");
+  } catch (error) {
+    showToast("Failed to add expense.", "error");
+  } finally {
+    addExpense.classList.remove("loading");
+    addExpense.innerHTML = originalText;
   }
-  if (amount <= 0) {
-    alert("Amount must be greater than 0.");
-    return;
-  }
-  if (amount > 1000000) {
-    alert("Amount must not exceed 1,000,000.");
-    return;
-  }
-  if (Math.round(amount * 100) !== amount * 100) {
-    alert("Amount must have at most 2 decimal places.");
-    return;
-  }
-
-  let expense = {
-    type: "expense",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(expense);
-  updateUI();
-  clearInput([expenseTitle, expenseAmount]);
 });
 
-addIncome.addEventListener("click", function () {
+addIncome.addEventListener("click", async function () {
   const title = incomeTitle.value.trim();
   const amount = +incomeAmount.value;
 
-  // Title validation
-  if (!title) {
-    alert("Please enter a title.");
-    return;
-  }
-  if (title.length > 30) {
-    alert("Title must be 30 characters or less.");
-    return;
-  }
+  if (!title) { showToast("Please enter a title.", "error"); return; }
+  if (title.length > 30) { showToast("Title must be 30 characters or less.", "error"); return; }
+  if (!incomeAmount.value) { showToast("Please enter an amount.", "error"); return; }
+  if (amount <= 0) { showToast("Amount must be greater than 0.", "error"); return; }
+  if (amount > 1000000) { showToast("Amount must not exceed 1,000,000.", "error"); return; }
+  if (Math.round(amount * 100) !== amount * 100) { showToast("Amount must have at most 2 decimal places.", "error"); return; }
 
-  // Amount validation
-  if (!incomeAmount.value) {
-    alert("Please enter an amount.");
-    return;
+  const originalText = addIncome.innerHTML;
+  addIncome.classList.add("loading");
+  addIncome.innerHTML = '< img src="icon/plus.png" alt="" /> Adding...';
+  try {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    let income = { type: "income", title, amount };
+    ENTRY_LIST.push(income);
+    updateUI();
+    clearInput([incomeTitle, incomeAmount]);
+    showToast("Income added successfully!", "success");
+  } catch (error) {
+    showToast("Failed to add income.", "error");
+  } finally {
+    addIncome.classList.remove("loading");
+    addIncome.innerHTML = originalText;
   }
-  if (amount <= 0) {
-    alert("Amount must be greater than 0.");
-    return;
-  }
-  if (amount > 1000000) {
-    alert("Amount must not exceed 1,000,000.");
-    return;
-  }
-  if (Math.round(amount * 100) !== amount * 100) {
-    alert("Amount must have at most 2 decimal places.");
-    return;
-  }
-
-  let income = {
-    type: "income",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(income);
-  updateUI();
-  clearInput([incomeTitle, incomeAmount]);
 });
 
 incomeList.addEventListener("click", deleteOrEdit);
 expenseList.addEventListener("click", deleteOrEdit);
 allList.addEventListener("click", deleteOrEdit);
 
-// HELEPER FUNCS
+// HELPER FUNCS
 function deleteOrEdit(event) {
   const targetBtn = event.target.closest("button");
   if (!targetBtn) return;
@@ -182,7 +166,6 @@ function updateUI() {
 
   let sign = income >= outcome ? "$" : "-$";
 
-  //UPDATE UI
   balanceEl.innerHTML = `<small>${sign}</small>${balance}`;
   outcomeTotalEl.innerHTML = `<small>$</small>${outcome}`;
   incomeTotalEl.innerHTML = `<small>$</small>${income}`;
@@ -201,7 +184,6 @@ function updateUI() {
   localStorage.setItem("entry_list", JSON.stringify(ENTRY_LIST));
 }
 
-// fix — avoid XSS
 function showEntry(list, type, title, amount, id) {
   const li = document.createElement("li");
   li.id = id;
@@ -247,6 +229,7 @@ function calculateTotal(type, list) {
 function calculateBalance(income, outcome) {
   return income - outcome;
 }
+
 function clearInput(inputs) {
   inputs.forEach((input) => {
     input.value = "";
@@ -267,6 +250,7 @@ function active(element) {
   element.classList.add("focus");
   element.setAttribute("aria-selected", "true");
 }
+
 function inactive(elements) {
   elements.forEach((element) => {
     element.classList.remove("focus");
