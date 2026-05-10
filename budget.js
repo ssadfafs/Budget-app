@@ -32,6 +32,9 @@ const DELETE = "delete",
   EDIT = "edit";
 let editingIndex = -1;  // -1 表示没在编辑，其他数字表示正在编辑第几条
 
+document.getElementById("lang-en").addEventListener("click", () => applyTranslations("en"));
+document.getElementById("lang-zh").addEventListener("click", () => applyTranslations("zh"));
+
 // ── COOKIE BANNER ──────────────────────────────────────────
 const cookieBanner = document.getElementById("cookie-banner");
 const cookieAcceptBtn = document.getElementById("cookie-accept");
@@ -86,29 +89,29 @@ addExpense.addEventListener("click", function () {
 
   // Title validation
   if (!title) {
-    alert("Please enter a title.");
+    alert(translations[getCurrentLang()].alertEmptyTitle);
     return;
   }
   if (title.length > 30) {
-    alert("Title must be 30 characters or less.");
+    alert(translations[getCurrentLang()].alertTitleLength);
     return;
   }
 
   // Amount validation
   if (!expenseAmount.value) {
-    alert("Please enter an amount.");
+    alert(translations[getCurrentLang()].alertEmptyAmount);
     return;
   }
   if (amount <= 0) {
-    alert("Amount must be greater than 0.");
+    alert(translations[getCurrentLang()].alertNegativeAmount);
     return;
   }
   if (amount > 1000000) {
-    alert("Amount must not exceed 1,000,000.");
+    alert(translations[getCurrentLang()].alertMaxAmount);
     return;
   }
   if (Math.round(amount * 100) !== amount * 100) {
-    alert("Amount must have at most 2 decimal places.");
+    alert(translations[getCurrentLang()].alertDecimalAmount);
     return;
   }
 
@@ -305,3 +308,5 @@ function inactive(elements) {
     element.setAttribute("aria-selected", "false");
   });
 }
+
+applyTranslations(currentLang);
