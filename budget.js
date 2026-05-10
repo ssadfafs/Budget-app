@@ -309,4 +309,10 @@ function inactive(elements) {
   });
 }
 
-applyTranslations(currentLang);
+if (typeof applyTranslations === "function" && typeof currentLang !== "undefined") {
+  applyTranslations(currentLang);
+}
+
+if (typeof module !== "undefined") {
+  module.exports = { calculateTotal, calculateBalance };
+}
