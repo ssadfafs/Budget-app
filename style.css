@@ -536,3 +536,32 @@ ul.list button:focus-visible {
   font-size: 0.8em;
   text-decoration: underline;
 }
+
+.lang-toggle {
+  display: inline-block;
+  float: right;
+  margin-right: 20px;
+  margin-top: -2px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.75em;
+  font-family: "Gilroy Bold";
+  transition: all 0.2s;
+}
+
+.lang-btn + .lang-btn {
+  margin-left: 6px;
+}
+
+.lang-active {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+}

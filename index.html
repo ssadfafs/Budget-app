@@ -11,42 +11,46 @@
     <!-- COOKIE BANNER -->
     <div id="cookie-banner">
       <p>
-        This app uses <strong>localStorage</strong> to save your budget data on your device.
-        No data is sent to any server. By continuing, you agree to our
-        <a href="privacy.html" target="_blank">Privacy Policy</a>.
+        <span id="cookie-text">This app uses localStorage to save your budget data on your device. No data is sent to any server. By continuing, you agree to our</span>
+        <a href="privacy.html" target="_blank" data-i18n="privacyPolicy" data-i18n-href="privacyPolicyUrl">Privacy Policy</a>.
       </p>
       <div class="cookie-buttons">
-        <button id="cookie-accept">Accept</button>
-        <button id="cookie-decline">Decline</button>
+        <button id="cookie-accept" data-i18n="cookieAccept">Accept</button>
+        <button id="cookie-decline" data-i18n="cookieDecline">Decline</button>
       </div>
     </div>
 
     <div class="budget-container">
       <div class="app-title">
         <a href="">Budget<b>App</b></a>
+        <div class="lang-toggle">
+          <button id="lang-en" class="lang-btn lang-active">EN</button>
+          <button id="lang-zh" class="lang-btn">中文</button>
+        </div>
       </div>
       <div class="budget-header">
         <div class="balance">
-          <div class="title">Balance</div>
+          <div class="title" data-i18n="balance">Balance</div>
           <div class="value"><small>$</small>0</div>
         </div>
         <div class="account">
           <div class="income">
-            <div class="title">Income</div>
+            <div class="title" data-i18n="income">Income</div>
             <div class="income-total"><small>$</small>0</div>
           </div>
           <div class="chart"></div>
           <div class="outcome">
-            <div class="title">Outcome</div>
+            <div class="title" data-i18n="outcome">Outcome</div>
             <div class="outcome-total"><small>$</small>0</div>
           </div>
         </div>
       </div>
       <div class="budget-dashboard">
-        <div class="dash-title">Dashboard</div>
+        <div class="dash-title" data-i18n="dashboard">Dashboard</div>
         <div class="toggle" role="tablist" aria-label="Budget entry views">
           <button
             class="first-tab"
+            data-i18n="expenses"
             type="button"
             role="tab"
             aria-controls="expense"
@@ -56,6 +60,7 @@
           </button>
           <button
             class="second-tab"
+            data-i18n="income"
             type="button"
             role="tab"
             aria-controls="income"
@@ -65,6 +70,7 @@
           </button>
           <button
             class="third-tab focus"
+            data-i18n="all"
             type="button"
             role="tab"
             aria-controls="all"
@@ -79,16 +85,18 @@
             <input
               type="text"
               id="expense-title-input"
+              data-i18n-placeholder="titlePlaceholder"
               name="title"
               placeholder="title"
             />
             <input
               type="number"
               id="expense-amount-input"
+              data-i18n-placeholder="amountPlaceholder"
               name="amount"
               placeholder="$0"
             />
-            <button class="add-expense" type="button" aria-label="Add expense">
+            <button class="add-expense" data-i18n-aria="addExpenseLabel" type="button" aria-label="Add expense">
               <img src="icon/plus.png" alt="" />
             </button>
           </div>
@@ -99,16 +107,18 @@
             <input
               type="text"
               id="income-title-input"
+              data-i18n-placeholder="titlePlaceholder"
               name="title"
               placeholder="title"
             />
             <input
               type="number"
               id="income-amount-input"
+              data-i18n-placeholder="amountPlaceholder"
               name="amount"
               placeholder="$0"
             />
-            <button class="add-income" type="button" aria-label="Add income">
+            <button class="add-income" data-i18n-aria="addIncomeLabel" type="button" aria-label="Add income">
               <img src="icon/plus.png" alt="" />
             </button>
           </div>
@@ -120,11 +130,12 @@
 
       <!-- FOOTER with Privacy Policy link -->
       <div class="app-footer">
-        <a href="privacy.html" target="_blank">Privacy Policy</a>
+        <a href="privacy.html" target="_blank" data-i18n="privacyPolicy" data-i18n-href="privacyPolicyUrl">Privacy Policy</a>
       </div>
     </div>
 
     <script src="./chart.js"></script>
+    <script src="./i18n.js"></script>
     <script src="./budget.js"></script>
   </body>
 </html>
