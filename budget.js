@@ -30,6 +30,7 @@ let balance = 0,
   outcome = 0;
 const DELETE = "delete",
   EDIT = "edit";
+let editingIndex = -1;  // -1 表示没在编辑，其他数字表示正在编辑第几条
 
 // ── COOKIE BANNER ──────────────────────────────────────────
 const cookieBanner = document.getElementById("cookie-banner");
@@ -111,12 +112,14 @@ addExpense.addEventListener("click", function () {
     return;
   }
 
-  let expense = {
-    type: "expense",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(expense);
+  if (editingIndex >= 0) {
+    // 编辑模式：直接更新原位置
+    ENTRY_LIST[editingIndex] = { type: "expense", title, amount };
+    editingIndex = -1;
+  } else {
+    // 新增模式
+    ENTRY_LIST.push({ type: "expense", title, amount });
+  }
   updateUI();
   clearInput([expenseTitle, expenseAmount]);
 });
@@ -153,12 +156,14 @@ addIncome.addEventListener("click", function () {
     return;
   }
 
-  let income = {
-    type: "income",
-    title: title,
-    amount: amount,
-  };
-  ENTRY_LIST.push(income);
+  if (editingIndex >= 0) {
+    // 编辑模式：直接更新原位置
+    ENTRY_LIST[editingIndex] = { type: "income", title, amount };
+    editingIndex = -1;
+  } else {
+    // 新增模式
+    ENTRY_LIST.push({ type: "income", title, amount });
+  }
   updateUI();
   clearInput([incomeTitle, incomeAmount]);
 });
@@ -187,7 +192,9 @@ function deleteEntry(entry) {
 }
 
 function editEntry(entry) {
-  const ENTRY = ENTRY_LIST[entry.id];
+  const index = parseInt(entry.id);
+  const ENTRY = ENTRY_LIST[index];
+  editingIndex = index;  // 记住在编辑哪一条
 
   if (ENTRY.type == "income") {
     incomeTitle.value = ENTRY.title;
@@ -196,7 +203,6 @@ function editEntry(entry) {
     expenseTitle.value = ENTRY.title;
     expenseAmount.value = ENTRY.amount;
   }
-  deleteEntry(entry);
 }
 
 function updateUI() {
