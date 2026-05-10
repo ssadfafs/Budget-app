@@ -8,6 +8,19 @@
     <link href="./style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <!-- COOKIE BANNER -->
+    <div id="cookie-banner">
+      <p>
+        This app uses <strong>localStorage</strong> to save your budget data on your device.
+        No data is sent to any server. By continuing, you agree to our
+        <a href="privacy.html" target="_blank">Privacy Policy</a>.
+      </p>
+      <div class="cookie-buttons">
+        <button id="cookie-accept">Accept</button>
+        <button id="cookie-decline">Decline</button>
+      </div>
+    </div>
+
     <div class="budget-container">
       <div class="app-title">
         <a href="">Budget<b>App</b></a>
@@ -104,7 +117,13 @@
           <ul class="list"></ul>
         </div>
       </div>
+
+      <!-- FOOTER with Privacy Policy link -->
+      <div class="app-footer">
+        <a href="privacy.html" target="_blank">Privacy Policy</a>
+      </div>
     </div>
+
     <script src="./chart.js"></script>
     <script src="./budget.js"></script>
   </body>

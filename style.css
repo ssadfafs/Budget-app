@@ -470,3 +470,69 @@ ul.list button:focus-visible {
   background-size: 20px 20px;
   background-repeat: no-repeat;
 }
+
+
+
+/* ── COOKIE BANNER ── */
+#cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  background-color: #1a0034;
+  color: #fff;
+  padding: 14px 18px;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+#cookie-banner p {
+  font-size: 0.82em;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+#cookie-banner a {
+  color: #f0624d;
+  text-decoration: underline;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#cookie-accept,
+#cookie-decline {
+  flex: 1;
+  padding: 7px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85em;
+  cursor: pointer;
+  font-family: "Gilroy Bold";
+}
+
+#cookie-accept {
+  background-color: #f0624d;
+  color: #fff;
+}
+
+#cookie-decline {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+/* ── FOOTER ── */
+.app-footer {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.app-footer a {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8em;
+  text-decoration: underline;
+}
